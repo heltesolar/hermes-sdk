@@ -2,7 +2,7 @@
 
 namespace Helte\HermesSdk\Observers;
 
-class ElasticsearchObserver
+class ElasticSearchObserver
 {
     public function __construct()
     {
