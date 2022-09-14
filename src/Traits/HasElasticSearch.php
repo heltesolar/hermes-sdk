@@ -1,28 +1,40 @@
 <?php
 
-namespace Helte\HermesSdk\Services\Traits;
+namespace Helte\HermesSdk\Traits;
 
-use App\Integrations\ElasticSearch\Jobs\DeleteDocument;
-use App\Integrations\ElasticSearch\Jobs\IndexDocument;
 use App\Integrations\ElasticSearch\Observers\ElasticsearchObserver;
+use Helte\HermesSdk\Services\HermesService;
 
 trait HasElasticSearch
 {
     public static function bootHasElasticSearch()
     {
-        if (config('services.elasticsearch.enabled')) {
+        if (config('hermes.elasticsearch.enabled')) {
             static::observe(ElasticSearchObserver::class);
         }
     }
 
     public function elasticsearchIndex()
     {
-        IndexDocument::dispatch($this->getTable(),$this->getKey(),$this->toElasticsearchDocumentArray());
+        HermesService::dispatchJob('IndexDocument', [
+            'private_params' => [
+                'index' => $this->getTable(),
+                'id' => $this->getKey(),
+                'body' => $this->toElasticsearchDocumentArray()
+            ],
+            'namespace' => "App\Integrations\ElasticSearch\Jobs"
+        ]);
     }
 
     public function elasticsearchDelete()
     {
-        DeleteDocument::dispatch($this->getTable(),$this->getKey());
+        HermesService::dispatchJob('DeleteDocument', [
+            'private_params' => [
+                'index' => $this->getTable(),
+                'id' => $this->getKey()
+            ],
+            'namespace' => "App\Integrations\ElasticSearch\Jobs"
+        ]);
     }
 
     abstract public function toElasticsearchDocumentArray(): array;

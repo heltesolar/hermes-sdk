@@ -2,9 +2,10 @@
 
 namespace Helte\HermesSdk\Providers;
 
+use Helte\HermesSdk\Console\Commands\InstallCommand;
 use Illuminate\Support\ServiceProvider;
 
-class InspirationProvider extends ServiceProvider
+class HermesProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -13,6 +14,12 @@ class InspirationProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/../config/hermes.php' => config_path('hermes.php'),
+        ], 'hermes-config');
+
+        $this->commands([
+            InstallCommand::class,
+        ]);
     }
 }

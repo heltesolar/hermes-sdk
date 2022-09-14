@@ -1,6 +1,6 @@
 <?php
 
-namespace Helte\HermesSdk\Services\Observers;
+namespace Helte\HermesSdk\Observers;
 
 class ElasticsearchObserver
 {
