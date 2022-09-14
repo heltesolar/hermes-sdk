@@ -1,0 +1,19 @@
+{
+    "name": "helte/hermes-sdk",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Helte\\HermesSdk\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Matheus Lago Frete",
+            "email": "mlfrete@gmail.com"
+        }
+    ],
+    "require": {}
+}
