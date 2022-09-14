@@ -15,7 +15,7 @@ class HermesProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/hermes.php' => config_path('hermes.php'),
+            __DIR__.'/../../config/hermes.php' => config_path('hermes.php'),
         ], 'hermes-config');
 
         $this->commands([
