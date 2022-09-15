@@ -2,7 +2,7 @@
 
 namespace Helte\HermesSdk\Traits;
 
-use App\Integrations\ElasticSearch\Observers\ElasticsearchObserver;
+use Helte\HermesSdk\Observers\ElasticsearchObserver;
 use Helte\HermesSdk\Services\HermesService;
 
 trait HasElasticSearch
