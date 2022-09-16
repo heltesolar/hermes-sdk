@@ -28,13 +28,27 @@ trait HasElasticSearch
 
     public function elasticsearchDelete()
     {
-        HermesService::dispatchJob('DeleteDocument', [
-            'private_params' => [
-                'index' => $this->getTable(),
-                'id' => $this->getKey()
-            ],
-            'namespace' => "App\Integrations\ElasticSearch\Jobs"
-        ]);
+        if (property_exists(self::class, 'elasticSoftDeletes') && self::$elasticSoftDeletes) {
+            $body = $this->toElasticsearchDocumentArray();
+            $body['deleted_at'] = now()->toIso8601String();
+
+            HermesService::dispatchJob('IndexDocument', [
+                'private_params' => [
+                    'index' => $this->getTable(),
+                    'id' => $this->getKey(),
+                    'body' => $body
+                ],
+                'namespace' => "App\Integrations\ElasticSearch\Jobs"
+            ]);
+        }else{
+            HermesService::dispatchJob('DeleteDocument', [
+                'private_params' => [
+                    'index' => $this->getTable(),
+                    'id' => $this->getKey()
+                ],
+                'namespace' => "App\Integrations\ElasticSearch\Jobs"
+            ]);
+        }
     }
 
     abstract public function toElasticsearchDocumentArray(): array;
