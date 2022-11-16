@@ -65,7 +65,7 @@ class HermesService
         return HermesQueuer::pushOn($hermes_queue, $hermes_job);
     }
 
-    private static function getQueue(){
+    protected static function getQueue(){
         return config('hermes.queue');
     }
 }
