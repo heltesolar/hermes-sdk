@@ -60,7 +60,7 @@ class HermesService
             $hermes_job = fakeObject($namespace, $job, $uses, $public_params, $private_params, $protected_params);
         }
 
-        $hermes_queue = self::getQueue();
+        $hermes_queue = static::getQueue();
 
         return HermesQueuer::pushOn($hermes_queue, $hermes_job);
     }
