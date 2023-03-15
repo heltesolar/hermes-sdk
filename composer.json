@@ -15,5 +15,7 @@
             "email": "mlfrete@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "helte/dev-tools": "dev-release-0.1"
+    }
 }

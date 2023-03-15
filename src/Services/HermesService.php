@@ -2,6 +2,9 @@
 
 namespace Helte\HermesSdk\Services;
 
+use Helte\DevTools\Services\HttpApiClient;
+use Helte\DevTools\Services\SettingService;
+
 class HermesService
 {
     /**
@@ -67,5 +70,73 @@ class HermesService
 
     protected static function getQueue(){
         return config('hermes.queue');
+    }
+
+    /**
+     * Makes API call to an endpoint on Hermes.
+     *
+     * @param string $endpoint - Endpoint to be called.
+     * @param string $method - Request method (case insensitive)
+     * @param array $body - HTTP body
+     * @param array $headers - HTTP extra headers (case insensitive)
+     * @param array $params - URL query params
+     * @param boolean $http_errors - Decides if HTTP exceptions are thrown
+     * @param string $body_type - Defines type of body
+     * @return Illuminate\Http\Client\Response
+     * @throws \GuzzleHttp\Exception\ClientException
+     */
+    public function request($endpoint, $method = 'GET', $body = [], $headers = [], $params = [], $http_errors = true, $body_type = 'json') {
+        $token = $this->handleHermesToken();
+        
+        $hermes_headers = [
+            'Authorization' => "Bearer $token",
+        ];
+
+        $headers = array_merge($hermes_headers, $headers ?? []);
+
+        $hermes_api_url = config('hermes.url');
+        $url = "$hermes_api_url/api/v1/$endpoint";
+
+        return HttpApiClient::call($url, $method, $body, $headers, $params, $http_errors, $body_type);
+    }
+
+    protected function handleHermesToken($force_refresh = false)
+    {
+        $token_validity = \Carbon\Carbon::parse(SettingService::getSetting(config('hermes.authentication.token_settings.token_until_index')));
+
+        /** Verifica se o token ainda é valido, senão atualiza o mesmo */
+        if ($force_refresh || 
+                                \Carbon\Carbon::now()->diffInSeconds($token_validity, false) <= 60 || 
+                                is_null(SettingService::getSetting(config('hermes.authentication.token_settings.token_until_index'))) || 
+                                is_null(SettingService::getSetting(config('hermes.authentication.token_settings.token_index')))) {
+
+            $hermes_api_url = config('hermes.url');
+
+            $headers = [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ];
+
+            $body = [
+                "grant_type" => "client_credentials",
+                "client_id" => config('hermes.authentication.client_credentials.client_id'),
+                "client_secret" => config('hermes.authentication.client_credentials.client_secret'),
+                "scope" => "*"
+            ];
+
+            $endpoint = "$hermes_api_url/oauth/token";
+
+            $response_data = HttpApiClient::call($endpoint, "post", $body, $headers);
+
+            $token = $response_data['access_token'];
+
+            SettingService::setSetting(config('hermes.authentication.token_settings.token_index'), $token);
+            $until = \Carbon\Carbon::now()->addHours(2)->format('Y-m-d H:i:s');
+            SettingService::setSetting(config('hermes.authentication.token_settings.token_until_index'), $until);
+
+            return $token;
+        }else{
+            return SettingService::getSetting(config('hermes.authentication.token_settings.token_index'));
+        }
     }
 }
