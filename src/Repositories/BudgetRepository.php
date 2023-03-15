@@ -8,7 +8,7 @@ class BudgetRepository extends SchemaRepository
 {
     public function __construct()
     {
-        $this->setUri('api/v1/budgets');
+        $this->setUri('budgets');
     }
 
     public function from($uri){

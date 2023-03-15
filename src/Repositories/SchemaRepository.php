@@ -5,6 +5,7 @@ namespace Helte\HermesSdk\Repositories;
 use Exception;
 use Helte\HermesSdk\Services\HermesService;
 use Illuminate\Database\Eloquent\Model;
+use Helte\DevTools\Services\Json;
 
 class SchemaRepository
 {
@@ -20,19 +21,21 @@ class SchemaRepository
     protected function request($endpoint, $method = 'GET', $body = []){
         $hermes_service = new HermesService();
 
-        return $hermes_service->request(
+        $response = $hermes_service->request(
             $endpoint,
             $method,
             $body,
             $this->getHeaders(),
             $this->buildParams()
         );
+
+        return Json::decode($response->getBody()->getContents());
     }
 
     public function get(){
         $response = $this->request($this->getUri());
 
-        return collect($response->json()['data']);
+        return collect($response['data']);
     }
 
     public function find($id){
@@ -40,7 +43,7 @@ class SchemaRepository
         
         $response = $this->request($endpoint);
 
-        return $response->json();
+        return $response;
     }
 
     public function with($relationship){
@@ -96,7 +99,7 @@ class SchemaRepository
         if($this->user_type){
             switch($this->user_type){
                 case('App\Models\Client'):
-                    $headers[] = ['X-Company' => $this->user_id];
+                    $headers['X-Company'] = $this->user_id;
                     break;
                 default:
                     throw new Exception('Unsupported user type on schema building');
