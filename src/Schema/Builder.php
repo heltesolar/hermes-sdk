@@ -19,6 +19,7 @@ class Builder
     private $limit = 10;
     private $page = 1;
     private $filters = [];
+    private $sorting = [];
 
     public function __construct($uri = null)
     {
@@ -144,6 +145,15 @@ class Builder
         return $this;
     }
 
+    public function orderBy($column, $order='asc') : Builder{
+        $this->sorting = [
+            'column' => is_array($column) ? implode(',',$column) : $column,
+            'order' => $order
+        ];
+        
+        return $this;
+    }
+
     protected function setUri($uri) : Builder{
         $this->base_uri = $uri;
         
@@ -177,7 +187,24 @@ class Builder
         ];
 
         $filters = $this->renderFilters();
+        $sorting = $this->renderSorting();
+
         $params = array_merge($params, $filters);
+
+        return $params;
+    }
+
+    private function renderSorting() : array{
+        $params = [];
+
+        if($this->sorting){
+            $params['f_params'] = [
+                'orderBy' => [
+                    'field' => $this->sorting['column'],
+                    'type' => $this->sorting['order']
+                ]
+            ];
+        }
 
         return $params;
     }

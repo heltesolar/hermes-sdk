@@ -63,4 +63,8 @@ class SchemaRepository
     public static function whereNotNull(string $column) : Builder{
         return self::query()->whereNotNull($column);
     }
+
+    public function orderBy($column, $order='asc'){
+        return self::query()->orderBy($column, $order);
+    }
 }
