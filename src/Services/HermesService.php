@@ -132,9 +132,10 @@ class HermesService
             $response_data = Json::decode($response->getBody()->getContents());
 
             $token = $response_data['access_token'];
+            $seconds = $response_data['expires_in'];
 
             SettingService::setSetting(config('hermes.authentication.token_settings.token_index'), $token);
-            $until = \Carbon\Carbon::now()->addHours(2)->format('Y-m-d H:i:s');
+            $until = \Carbon\Carbon::now()->addSeconds($seconds);
             SettingService::setSetting(config('hermes.authentication.token_settings.token_until_index'), $until);
 
             return $token;
