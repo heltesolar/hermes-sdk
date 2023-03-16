@@ -189,7 +189,7 @@ class Builder
         $filters = $this->renderFilters();
         $sorting = $this->renderSorting();
 
-        $params = array_merge($params, $filters);
+        $params = array_merge($params, $filters, $sorting);
 
         return $params;
     }
