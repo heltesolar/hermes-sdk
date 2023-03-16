@@ -150,7 +150,7 @@ class Builder
         return $this;
     }
 
-    public function getUri() : Builder{
+    public function getUri() {
         return $this->base_uri;
     }
 
