@@ -18,6 +18,10 @@ Por último, rode o comando para instalar as configurações necessárias para o
     php artisan hermes:install
 Esse comando irá registar o arquivo **hermes.php** na pasta **app/config**. Esse arquivo especifica as configurações necessárias para utilizar os recursos do SDK, portanto, adicione em seu **.env** as seguintes chaves:
 ```
+HERMES_API_URL=
 HERMES_QUEUE=
+HERMES_ONPREMISE_QUEUE=
 HERMES_ELASTICSEARCH_ENABLED=
+HERMES_CLIENT_ID=
+HERMES_CLIENT_SECRET=
 ```
