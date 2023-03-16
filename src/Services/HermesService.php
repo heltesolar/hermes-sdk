@@ -4,6 +4,7 @@ namespace Helte\HermesSdk\Services;
 
 use Helte\DevTools\Services\HttpApiClient;
 use Helte\DevTools\Services\SettingService;
+use Helte\DevTools\Services\Json;
 
 class HermesService
 {
@@ -126,7 +127,9 @@ class HermesService
 
             $endpoint = "$hermes_api_url/oauth/token";
 
-            $response_data = HttpApiClient::call($endpoint, "post", $body, $headers);
+            $response = HttpApiClient::call($endpoint, "post", $body, $headers);
+
+            $response_data = Json::decode($response->getBody()->getContents());
 
             $token = $response_data['access_token'];
 
