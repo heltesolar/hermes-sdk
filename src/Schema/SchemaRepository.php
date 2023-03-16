@@ -13,7 +13,7 @@ class SchemaRepository
         if($uri){
             return new Builder($uri);
         }
-        return new Builder(self::$base_uri);
+        return new Builder(static::$base_uri);
     }
 
     public static function get() : Collection{
