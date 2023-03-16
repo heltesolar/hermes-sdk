@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 class SchemaRepository
 {
-    protected $base_uri;
+    protected static $base_uri;
 
     public static function query($uri = null) : Builder{
         if($uri){
@@ -62,15 +62,5 @@ class SchemaRepository
 
     public static function whereNotNull(string $column) : Builder{
         return self::query()->whereNotNull($column);
-    }
-
-    public function setUri($uri){
-        $this->base_uri = $uri;
-        
-        return $this;
-    }
-
-    public function getUri(){
-        return $this->base_uri;
     }
 }

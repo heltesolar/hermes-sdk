@@ -8,12 +8,7 @@ use Helte\HermesSdk\Schema\SchemaRepository;
 
 class BudgetRepository extends SchemaRepository
 {
-    protected $base_uri = 'budgets';
-
-    public function __construct()
-    {
-        $this->setUri('budgets');
-    }
+    protected static $base_uri = 'budgets';
 
     public static function from($uri) : Builder{
         return self::query();
