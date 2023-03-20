@@ -11,7 +11,7 @@ class TakeBlipService
             'SendTakeBlipMessage',
             [
                 'namespace' => 'App\Integrations\TakeBlip\Jobs',
-                'private_params' => ['client_id' => $client_id, 'message_params' => $message_params, 'phone', $phone, 'template' => $template, 'force' => $force]
+                'private_params' => ['client_id' => $client_id, 'message_params' => $message_params, 'phone' => $phone, 'template' => $template, 'force' => $force]
             ]
         );
     }
