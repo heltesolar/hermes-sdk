@@ -213,8 +213,10 @@ class Builder
         $params = [];
 
         if($this->filters){
-            foreach($this->filters as $filter){
-                switch($filter['operation']){
+            foreach($this->filters as $f){
+                $type = $f['operation'];
+                $filter = $f['parameters'];
+                switch($type){
                     case "where_basic":
                         $params[$filter[0]] = $filter[1];
                         break;
