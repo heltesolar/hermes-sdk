@@ -16,6 +16,6 @@
         }
     ],
     "require": {
-        "helte/dev-tools": "dev-release-0.1"
+        "helte/dev-tools": "^dev-release-0.3"
     }
 }
